@@ -1,0 +1,30 @@
+<html>
+    <!-- HEAD DO PROGRAMA -->
+    <head>
+        <title> Meu Primeiro Canvas</title>
+
+        <!-- SCRIPT DE EXECUÇÃO DAS OPERAÇÕES LÓGICAS E GRÁFICAS -->
+         <script>
+                // VARIAVEIS E ESCOPO GLOBAL
+                var canvas;         // Superficie onde o navegador desenhará, representa a tela                                                                            
+                var estojo;         // Objeto que armazena ferramentas de desenho
+
+                //FUNÇÃO DE RENDERIZAÇÃO
+                function TerminouCarregar() {
+                    canvas = document.getElementById('meuCanvas');      // Procura elemento meuCanvas e gaurda informação na variavel
+                    estojo = canvas.getContext('2d');                   // Solicitando ferramentas de desnho bidimensional
+
+                    estojo.fillStyle = 'royalblue';                     // Definindo cor usado
+                    estojo.fillRect(100, 100, 200, 200);                // Tamanho desenhado na tela, (x, y, width, height)
+                }
+         </script>
+    </head>
+
+    <!-- BODY DO PROGRAMA -->
+     <body 
+     onload="TerminouCarregar()">
+
+     <canvas id = "meuCanvas" width="500" height="400"></canvas>
+
+     </body>
+</html>
