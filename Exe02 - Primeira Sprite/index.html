@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Primeira Sprite!</title>
+
+        <script>
+            // variaveis de quadro e ferramentas
+            var canvas, estojo;
+            var xBalao = 350;       // VARIAVEL DE POSIÇÃO EIXO X
+            var iBalao;             // AMARZENA IMAGEM DO BALÃO
+
+            // FUNÇAO DE RENDERIZAÇÃO DO CANVAS
+            function Renderizar(){
+                canvas = document.getElementById('meuCanvas');
+                estojo = canvas.getContext('2d');
+
+                iBalao = new Image();           // CRIANDO OBJ DE IMAGEM PARA VARIAVEL DO BALÃO
+                iBalao.src = 'balao.png';       // SELECIONANDO A IMAGEM DO BALÃO
+
+                // INTERVALO DE RENDERIZAÇÃO 60 FPS (1000 MILISEGUNDOS / 16,6666 ~= 60)
+                setInterval(Loop, 16.6666);     // METODO QUE DIZ EM QUE INTERVALO UMA FUNÇÃO SE REPETIRÁ NOVAMENTE
+            }
+
+            // FUNÇÃO DE LOOPING PRINCIPAL CHAMADA LOGO NO FINAL DA RENDERIZAÇÃO
+            function Loop(){
+                xBalao += 5;                                                        // MOVIMENTAÇÃO NO EIXO X                                                                         
+                //estojo.clearRect(0, 0, 800, 600);
+                estojo.drawImage(iBalao, xBalao, 100, 80, 100);
+
+                if(xBalao > 800) xBalao = 0;
+            }
+        </script>
+    </head>
+
+    <body
+    onload = "Renderizar()">
+
+        <canvas
+        id = "meuCanvas" width="800" height="600">
+
+        </canvas>
+    </body>
+</html>
