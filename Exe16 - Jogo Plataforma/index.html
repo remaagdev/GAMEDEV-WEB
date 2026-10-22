@@ -1,0 +1,238 @@
+<!--
+Atividade Dupla:
+- Implementar suporte a pelo menos 5 tiles;
+- Criar uma nova fase que use os tiles disponiveis;
+-->
+
+<html>
+	<head>
+		<title>Dominando o conceito de mapas bidimensionais</title>
+		<script>
+		// Declaração de variáveis
+		var canvas;																	// Quadro da tela
+		var context;																// Ferramentas da tela
+		var imgFundo1, imgFundo2, imgFundo3, imgTilePlatform, imgTileGem;			// Backgrounds e Tilesets
+		var imgBlock0, imgBlock1, imgBlock2, imgBlock3, imgBlock4					// Tileset de blocos
+
+		// Assets PLayer
+		var imgPlayerCelebrate;														// Celebrando
+		var imgPlayerDie;															// Morrendo			
+		var imgPlayerIdle;															// Parado
+		var imgPlayerJump;															// Pulando
+		var imgPlayerRun;															// Correndo
+		
+		// Variaveis de imagem e animação
+		var playerWidth;															// Largura do Player 
+		var frame = 0;																// Quantia de frames
+		var indiceAnimacao = 0;														// Indice atual da animação
+		var qtdImagensSprite = 10;													// 
+		
+		var player;
+		
+		var mapa = [
+			"....................",
+			"....................",
+			"...GGGGG............",
+			"....................",
+			"....#######.........",
+			"....................",
+			"....................",
+			".........GGG........",
+			".........###........",
+			"....................",
+			"....GGG.......GGG...",
+			"....###.......###...",
+			"....................",
+			".1................X.",
+			"####################"];
+
+		var mapa1 = [
+			"....................",
+			"....................",
+			"....................",
+			"....................",
+			"....................",
+			"....................",
+			"....................",
+			"....................",
+			"....................",
+			"GGGGGGGG............",
+			"vvvvvvvv............",
+			".............bbb....",
+			"...........nn.......",
+			".1.....mmm........X.",
+			"####################"];
+
+		function Tile()
+		{
+			this.x = 0;
+			this.y = 0;
+			this.block = false;
+		}
+		
+		var States = {
+			Celebrate:0,
+			Die:1,
+			Idle:2,
+			Jump:3,
+			Run:4
+		}
+		
+		function Player()
+		{
+			this.x = 0;
+			this.y = 0;
+			this.state = States.Run;
+		}
+		
+		function Initialize(){
+			canvas = document.getElementById("canvas");
+			context = canvas.getContext("2d");
+			
+			imgFundo1 = new Image();
+			imgFundo2 = new Image();
+			imgFundo3 = new Image();
+
+			imgTilePlatform = new Image();
+			imgTileGem = new Image();
+
+			imgPlayerCelebrate = new Image();
+			imgPlayerDie = new Image();
+			imgPlayerIdle = new Image();
+			imgPlayerJump = new Image();
+			imgPlayerRun = new Image();
+			
+			imgFundo1.src = "Layer0_0.png";
+			imgFundo2.src = "Layer1_0.png";
+			imgFundo3.src = "Layer2_0.png";
+
+			imgTilePlatform.src = "Platform.png";
+			imgTileGem.src = "gem.png";
+			imgBlock0.src = "BlockA0.png";
+			imgBlock1.src = "BlockA1.png";
+			imgBlock2.src = "BlockA2.png";
+			imgBlock3.src = "BlockA3.png";
+			imgBlock4.src = "BlockA4.png";
+
+			imgPlayerCelebrate.src = "Celebrate.png";
+			imgPlayerDie.src = "Die.png";
+			imgPlayerIdle.src = "Idle.png";
+			imgPlayerJump.src = "Jump.png";
+			imgPlayerRun.src = "Run.png";
+			
+			player = new Player();
+			player.state = States.Jump;
+			player.x = 100;
+			
+			playerWidth = 64; //imgPlayerIdle.width;
+
+			setInterval(Loop, 1000/60)
+		}
+		
+		function Loop(){
+		
+			Update();
+			Draw();
+			
+			frame++;
+			
+			if(frame % 7 == 0)
+				indiceAnimacao++;
+		}
+		
+		function Update(){
+		}
+
+		function Draw() {
+			context.drawImage(imgFundo1,0,0);
+			context.drawImage(imgFundo2,0,0);
+			context.drawImage(imgFundo3,0,0);
+			DrawMap();
+			DrawPlayer();
+		}
+		
+		function DrawMap(){
+			for(linha = 0; linha < mapa.length; linha++){
+			
+				for(coluna = 0; coluna < mapa[linha].length; coluna++){
+					
+					var imgTile = undefined;
+					
+					switch(mapa[linha][coluna])
+					{
+						case "#": //Plataform
+							imgTile = imgTilePlatform;
+							break;		
+						case "G": //Gem
+							imgTile = imgTileGem;
+							break;	
+							case "m": //Bloco
+							imgTile = imgBlock0;
+							break;	
+							case "n": //Bloco
+							imgTile = imgBlock1;
+							break;
+							case "b": //Bloco
+							imgTile = imgBlock2;
+							break;
+							case "v": //Bloco
+							imgTile = imgBlock3;
+							break;
+							case "c": //Bloco
+							imgTile = imgBlock4;
+							break;						
+					}
+					
+					if(imgTile != undefined){
+						var xTile = coluna * imgTilePlatform.width;
+						var yTile = linha * imgTilePlatform.height;
+
+						context.drawImage(imgTile, xTile, yTile);
+					}
+				}
+			}
+		}
+		
+					
+		function DrawPlayer(){
+				var idxImagenNoSprite = (indiceAnimacao%qtdImagensSprite);
+				switch(player.state){
+					case States.Idle:
+						context.drawImage(imgPlayerIdle, player.x, player.y);
+						break;
+					case States.Celebrate:
+						context.drawImage(imgPlayerCelebrate, 
+							idxImagenNoSprite*playerWidth, 0, playerWidth, imgPlayerRun.height,
+							player.x, player.y, playerWidth, imgPlayerRun.height);					
+						break;
+					case States.Die:
+						context.drawImage(imgPlayerDie, 
+							idxImagenNoSprite*playerWidth, 0, playerWidth, imgPlayerRun.height,
+							player.x, player.y, playerWidth, imgPlayerRun.height);					
+						break;
+					case States.Run:
+						context.save();
+						context.translate((player.x + playerWidth / 2),player.y);
+						context.scale(-1,1);
+						context.translate(-(player.x + playerWidth / 2),player.y);
+						context.drawImage(imgPlayerRun, 
+							idxImagenNoSprite*playerWidth, 0, playerWidth, imgPlayerRun.height,
+							player.x, player.y, playerWidth, imgPlayerRun.height);
+						context.restore();
+						break;					
+								
+					case States.Jump:
+						context.drawImage(imgPlayerJump, 
+							idxImagenNoSprite*playerWidth, 0, playerWidth, imgPlayerRun.height,
+							player.x, player.y, playerWidth, imgPlayerRun.height);					
+						break;
+				}
+			}	
+		</script>
+	</head>
+	<body onload="Initialize();">
+		<canvas width="800" height="480" id="canvas">
+		Sem chance, canvas n�o rola!
+		</canvas>
+	</body>
+</html>
