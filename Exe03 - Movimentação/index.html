@@ -3,7 +3,83 @@
         <title>Movimentação por Input</title>
 
         <script>
-            
+            // DECLARAÇÃO DE VARIAVEIS
+            var canvas, estojo;
+            var xBalao = 100, yBalao = 100;
+            var spdBalao = 1;
+            var aBalao = 0;
+            var iBalao;
+            var hSpd = 0;
+            var vSpd = 0;
+
+            // Função para renderização
+            function Renderizar(){
+                canvas = document.getElementById("Background");
+                estojo = canvas.getContext("2d");
+
+                iBalao = new Image();
+                iBalao.src = "balao.png";
+
+                setInterval(Loop, 1000/60);
+            }
+
+            // Function de Looping
+            function Loop() {
+                // Normalização de vetores
+                let hDir = direita - esquerda;        // Direção horizontal
+                let vDir = baixo - cima;              // Direção vertical
+
+                if (hDir || vDir){
+                    hSpd += hDir * spdBalao;
+                    vSpd += vDir * spdBalao;
+                } else {
+                    // atrito
+                    hSpd *= 0.9;
+                }
+
+                
+
+                xBalao += hSpd;
+                yBalao += vSpd;
+
+                hDir = 0;
+                vDir = 0;
+
+                if (xBalao > 800) xBalao = 0;
+
+                estojo.clearRect(0, 0, 800, 600);
+                if (iBalao.complete) estojo.drawImage(iBalao, xBalao, yBalao);
+            }
+
+            // Declaração de variaveis para input de movimentação
+            var cima        = false;
+            var baixo       = false;
+            var esquerda    = false;
+            var direita     = false;
+
+            function TeclaInput(e){
+                if(e.keyCode == 39) direita = true;
+                if(e.keyCode) console.log(`${e.keyCode} pressionada. ${xBalao}`);
+            }
+
+            function TeclaOutput(e){
+                if(e.keyCode == 39) direita = false;
+                if(e.keyCode) console.log(`${e.keyCode} solta ${vSpd}`);
+            }
+
+
         </script>
     </head>
+
+    <!-- BODY -->
+     <body 
+        onload = "Renderizar();"
+        onkeydown ="TeclaInput(event);"
+        onkeyup = "TeclaOutput(event);">
+
+        <canvas id="Background" width="800" height="600">
+
+        </canvas>
+        
+     </body>
 </html>
